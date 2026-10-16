@@ -115,6 +115,13 @@ Item {
         picker.activated(0)
         check("picked", probe.pickedKeys, [probe.e.savings.key])
         check("still the app's choice", picker.currentIndex, 2)
+        console.log("a picker in a tight header shows the account alone")
+        picker.selectedLines = 1
+        check("no wallet line", prop(picker, "pickerSelectedWallet", "visible"), false)
+        check("no chips", prop(picker, "pickerSelectedSigners", "visible"), false)
+        check("...but the account", prop(picker, "pickerSelectedName", "visible"), true)
+        picker.selectedLines = 3
+        check("all three again", prop(picker, "pickerSelectedWallet", "visible"), true)
         picker.currentKey = probe.e.savings.key
         check("the app moved it", picker.currentIndex, 0)
         check("...shown", prop(picker, "pickerSelectedAddress", "text"), "0x9858…da94")

@@ -131,6 +131,15 @@ function indexOf(entries, keyOrId) {
     return e ? (entries || []).indexOf(e) : -1
 }
 
+// Whether some signer holding it signs several transactions as one request, as a swap with an
+// approval needs. Only a signer that takes bare hashes does: a device that shows what it signs
+// takes one transaction at a time. Unknown signers are not held against it.
+function signsBundles(e) {
+    var hs = (e && e.holders) || []
+    if (!hs.length) return true
+    return hs.some(function (h) { return !h.requestKinds || h.requestKinds.indexOf("hash") >= 0 })
+}
+
 // The id a Bitcoin account opens under: a holder's that already has a wallet here, else the
 // first holder's, which is the keystore's when it holds the account.
 function homeId(e, opened) {

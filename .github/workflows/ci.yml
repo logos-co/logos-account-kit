@@ -26,7 +26,7 @@ jobs:
           set -euo pipefail
           node doctests/roster_table.mjs | tee /tmp/roster.log
           n=$(grep -c "  PASS  " /tmp/roster.log)
-          echo "assertions: $n"; [ "$n" -ge 32 ]
+          echo "assertions: $n"; [ "$n" -ge 35 ]
 
   probes:
     name: component probes
@@ -51,7 +51,7 @@ jobs:
           if grep -q "SKIP" /tmp/probes.log; then echo "::error::the probes skipped"; exit 1; fi
           grep -q "RESULT: ALL PASS" /tmp/probes.log
           n=$(grep -c "  PASS  " /tmp/probes.log)
-          echo "assertions: $n"; [ "$n" -ge 42 ]
+          echo "assertions: $n"; [ "$n" -ge 46 ]
 
   vendor:
     name: vendor.sh and check.sh

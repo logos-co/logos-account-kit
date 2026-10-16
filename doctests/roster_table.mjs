@@ -63,6 +63,13 @@ check("by any holder's id", R.indexOf(all, "keycard-73c5da0a-84-1-0"), 2);
 check("an EVM id without case", R.indexOf(all, "0x9858EFFD232B4033E47D90003D41EC34ECAEDA94"), 0);
 check("unknown", R.indexOf(all, "g_nope"), -1);
 
+console.log("\nwhether a swap with an approval, two transactions, can be signed");
+const shows = { signer: "keycard_shell_module", requestKinds: ["evm_transaction", "evm_message"] };
+const hashes = { signer: "keystore_module", requestKinds: ["hash"] };
+check("a device that shows what it signs alone: no", R.signsBundles({ holders: [shows] }), false);
+check("with the keystore beside it: yes", R.signsBundles({ holders: [shows, hashes] }), true);
+check("signers not known yet: not held against it", R.signsBundles({ holders: [] }), true);
+
 console.log("\nthe id a Bitcoin account opens under");
 check("a holder's that already has a wallet", R.homeId(E.segwit, ["keycard-73c5da0a-84-1-0"]), "keycard-73c5da0a-84-1-0");
 check("else the first holder's", R.homeId(E.segwit, []), "g_segwit");

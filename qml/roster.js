@@ -54,13 +54,13 @@ function title(e) {
     return [name(e), shortAddress(e.address)].filter(Boolean).join(" ")
 }
 
-// The wallet it comes from: its name and master fingerprint, with an EVM address's index.
+// The wallet it comes from: its name and master fingerprint, with an EVM address's index. No
+// wallet is an imported key; an empty one is a wallet the app knows of but can't name.
 function walletLine(e) {
     if (!e) return ""
-    var w = e.wallet || {}
-    var fingerprint = text(w.fingerprint)
-    var named = text(w.name)
-    if (!fingerprint && !named) return isBitcoin(e) ? "Wallet unknown" : "Imported key · no wallet"
+    if (!e.wallet) return isBitcoin(e) ? "Wallet unknown" : "Imported key · no wallet"
+    var fingerprint = text(e.wallet.fingerprint)
+    var named = text(e.wallet.name)
     var parts = ["Wallet" + (named ? " “" + named + "”" : "")]
     if (fingerprint) parts.push(fingerprint)
     var n = accountNumber(e)

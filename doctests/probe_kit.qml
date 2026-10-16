@@ -129,6 +129,10 @@ Item {
         check("the imported key's row", row(1) ? row(1).enabled : "<no row>", false)
         check("another row", row(2) ? row(2).enabled : "<no row>", true)
         check("...showing its account", row(2) ? prop(row(2), "pickerRow_2Name", "text") : "<no row>", "Savings")
+        check("no copy button unless asked", row(0) ? prop(row(0), "pickerRow_0Copy", "visible") : "<no row>", false)
+        picker.copyable = true
+        check("...and one on an EVM row when asked", row(0) ? prop(row(0), "pickerRow_0Copy", "visible") : "<no row>", true)
+        check("...never on a Bitcoin row", row(2) ? prop(row(2), "pickerRow_2Copy", "visible") : "<no row>", false)
         picker.popup.close()
     }
 

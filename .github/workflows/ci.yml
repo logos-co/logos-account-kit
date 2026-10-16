@@ -51,7 +51,7 @@ jobs:
           if grep -q "SKIP" /tmp/probes.log; then echo "::error::the probes skipped"; exit 1; fi
           grep -q "RESULT: ALL PASS" /tmp/probes.log
           n=$(grep -c "  PASS  " /tmp/probes.log)
-          echo "assertions: $n"; [ "$n" -ge 37 ]
+          echo "assertions: $n"; [ "$n" -ge 40 ]
 
   vendor:
     name: vendor.sh and check.sh

@@ -68,6 +68,8 @@ LogosComboBox {
         contentItem: AccountIdentity {
             entry: row.modelData
             namePrefix: picker.objectName + "Row_" + row.index
+            copyable: picker.copyable
+            onCopied: function (v) { picker.copied(v) }
         }
     }
 }

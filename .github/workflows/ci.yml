@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roster:
+    name: roster.js table
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Plain JavaScript, so CodeQL can read it.
+      - run: node --check qml/roster.js
+      - run: |
+          set -euo pipefail
+          node doctests/roster_table.mjs | tee /tmp/roster.log
+          n=$(grep -c "  PASS  " /tmp/roster.log)
+          echo "assertions: $n"; [ "$n" -ge 30 ]
+
+  probes:
+    name: component probes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: logos-co/logos-design-system
+          path: .design-system
+      - uses: cachix/install-nix-action@v31
+      - name: doctests/run_view_probe.sh
+        env:
+          LOGOS_DESIGN_SYSTEM_QML: ${{ github.workspace }}/.design-system/src/qml
+          # Qt sends every message to journald when stderr is not a tty; a runner's never is.
+          QT_LOGGING_TO_CONSOLE: "1"
+        run: |
+          set -euo pipefail
+          nix shell nixpkgs#qt6.qtdeclarative -c bash -c '
+            d=$(dirname $(dirname $(readlink -f $(command -v qml))))
+            QML_BIN="$d/bin/qml" QT_QML_DIR="$d/lib/qt-6/qml" ./doctests/run_view_probe.sh' 2>&1 | tee /tmp/probes.log
+          if grep -q "SKIP" /tmp/probes.log; then echo "::error::the probes skipped"; exit 1; fi
+          grep -q "RESULT: ALL PASS" /tmp/probes.log
+          n=$(grep -c "  PASS  " /tmp/probes.log)
+          echo "assertions: $n"; [ "$n" -ge 37 ]
+
+  vendor:
+    name: vendor.sh and check.sh
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -euo pipefail
+          # One app keeps its view in src/qml, another in qml: both land beside it as accountkit/.
+          for view in src/qml qml; do
+            app="$RUNNER_TEMP/app-${view//\//-}"
+            mkdir -p "$app/$view"
+            echo '{"name":"probe_app"}' > "$app/metadata.json"
+            scripts/vendor.sh "$app"
+            grep -qx "module com.logos.module.probe_app.accountkit" "$app/$view/accountkit/qmldir"
+            scripts/check.sh "$app"
+          done

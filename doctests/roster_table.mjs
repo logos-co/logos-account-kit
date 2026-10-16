@@ -62,6 +62,9 @@ check("by key", R.indexOf(all, E.segwit.key), 2);
 check("by any holder's id", R.indexOf(all, "keycard-73c5da0a-84-1-0"), 2);
 check("an EVM id without case", R.indexOf(all, "0x9858EFFD232B4033E47D90003D41EC34ECAEDA94"), 0);
 check("unknown", R.indexOf(all, "g_nope"), -1);
+check("a checksummed address, whatever its holders say",
+      R.indexOf([{ key: "0xabcdef", family: "evm", address: "0xAbCdEf", holders: [] }], "0xABCDEF"), 0);
+check("...but a Bitcoin id stays exact", R.indexOf(all, E.segwit.key.toUpperCase()), -1);
 
 console.log("\nwhether a swap with an approval, two transactions, can be signed");
 const shows = { signer: "keycard_shell_module", requestKinds: ["evm_transaction", "evm_message"] };

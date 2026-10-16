@@ -26,7 +26,7 @@ jobs:
           set -euo pipefail
           node doctests/roster_table.mjs | tee /tmp/roster.log
           n=$(grep -c "  PASS  " /tmp/roster.log)
-          echo "assertions: $n"; [ "$n" -ge 35 ]
+          echo "assertions: $n"; [ "$n" -ge 37 ]
 
   probes:
     name: component probes

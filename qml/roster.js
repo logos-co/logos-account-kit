@@ -119,6 +119,8 @@ function find(entries, keyOrId) {
     for (var i = 0; i < list.length; i++) {
         var e = list[i]
         if (e.key === keyOrId) return e
+        // An EVM key is the lowercase address, and apps hold it checksummed.
+        if (!isBitcoin(e) && (sameId(e, e.key, keyOrId) || sameId(e, e.address, keyOrId))) return e
         var hs = e.holders || []
         for (var j = 0; j < hs.length; j++)
             if (sameId(e, hs[j].accountId, keyOrId)) return e

@@ -118,6 +118,14 @@ Item {
         picker.currentKey = probe.e.savings.key
         check("the app moved it", picker.currentIndex, 0)
         check("...shown", prop(picker, "pickerSelectedAddress", "text"), "0x9858…da94")
+        console.log("a new roster, the selected account renamed in it, keeps the selection")
+        picker.currentKey = probe.e.segwit.key
+        var renamed = JSON.parse(JSON.stringify(probe.e.segwit))
+        renamed.label = "Cold"
+        picker.entries = [probe.e.savings, probe.e.imported, renamed, probe.e.taproot]
+        check("still selected", picker.currentIndex, 2)
+        check("...under its new name", prop(picker, "pickerSelectedName", "text"), "Cold")
+        picker.entries = probe.all
         picker.popup.open()
     }
 

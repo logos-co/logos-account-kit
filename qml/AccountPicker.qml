@@ -22,7 +22,8 @@ LogosComboBox {
 
     function syncIndex() { currentIndex = Roster.indexOf(entries, currentKey) }
     Component.onCompleted: syncIndex()
-    onEntriesChanged: syncIndex()
+    // After the model, not the entries: ComboBox resets its index when its model is replaced.
+    onModelChanged: syncIndex()
     onCurrentKeyChanged: syncIndex()
     onActivated: function (index) {
         picker.picked(picker.entries[index])

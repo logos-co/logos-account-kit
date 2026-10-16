@@ -38,6 +38,7 @@ check("Bitcoin", R.walletLine(E.segwit), "Wallet “Main phrase” · 73c5da0a")
 check("unnamed wallet", R.walletLine(E.taproot), "Wallet · 73c5da0a");
 check("an imported key", R.walletLine(E.imported), "Imported key · no wallet");
 check("a wallet the app can't name", R.walletLine({ family: "evm", wallet: {}, path: "m/44'/60'/0'/0/2" }), "Wallet · account 2");
+check("nothing known of its wallet", R.walletLine({ family: "evm", address: "0x1" }), "Wallet unknown");
 
 console.log("\nsigners, by what they are, never by module");
 const [keystore, shell, qr, reader] = E.savings.holders;

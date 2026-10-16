@@ -1,0 +1,45 @@
+{
+  "savings": {
+    "key": "0x9858effd232b4033e47d90003d41ec34ecaeda94", "family": "evm", "chain": null,
+    "address": "0x9858EfFD232B4033E47d90003D41EC34EcaEda94", "path": "m/44'/60'/0'/0/0", "label": "Savings",
+    "wallet": { "fingerprint": "73c5da0a", "name": "Main phrase" },
+    "holders": [
+      { "signer": "keystore_module", "accountId": "0x9858EfFD232B4033E47d90003D41EC34EcaEda94", "kind": "keystore",
+        "model": "", "transport": "keystore", "presence": "local", "available": true },
+      { "signer": "keycard_shell_module", "accountId": "0x9858effd232b4033e47d90003d41ec34ecaeda94", "kind": "keycard_shell",
+        "model": "Keycard Shell", "transport": "usb", "presence": "connected", "available": true },
+      { "signer": "qr_signer_module", "accountId": "0x9858effd232b4033e47d90003d41ec34ecaeda94", "kind": "qr",
+        "model": "QR wallet", "transport": "qr", "presence": "on_demand", "available": true },
+      { "signer": "keycard_module", "accountId": "0x9858effd232b4033e47d90003d41ec34ecaeda94", "kind": "keycard",
+        "model": "", "transport": "reader", "presence": "absent", "available": false }
+    ]
+  },
+  "imported": {
+    "key": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", "family": "evm", "chain": null,
+    "address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", "path": null, "label": null, "wallet": null,
+    "holders": [
+      { "signer": "keystore_module", "accountId": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", "kind": "keystore",
+        "model": "", "transport": "keystore", "presence": "local", "available": true }
+    ]
+  },
+  "segwit": {
+    "key": "btc_00112233445566778899aabbccddeeff", "family": "bitcoin", "chain": "test",
+    "address": null, "path": "m/84'/1'/0'", "label": "Savings",
+    "wallet": { "fingerprint": "73c5da0a", "name": "Main phrase" },
+    "holders": [
+      { "signer": "keystore_module", "accountId": "g_segwit", "kind": "keystore",
+        "model": "", "transport": "keystore", "presence": "local", "available": true },
+      { "signer": "keycard_module", "accountId": "keycard-73c5da0a-84-1-0", "kind": "keycard",
+        "model": "", "transport": "reader", "presence": "connected", "available": true }
+    ]
+  },
+  "taproot": {
+    "key": "btc_ffeeddccbbaa99887766554433221100", "family": "bitcoin_taproot", "chain": "test",
+    "address": null, "path": "m/86'/1'/1'", "label": "",
+    "wallet": { "fingerprint": "73c5da0a" },
+    "holders": [
+      { "signer": "qr_signer_module", "accountId": "qr-73c5da0a-86-1-1", "kind": "qr",
+        "model": "QR wallet", "transport": "qr", "presence": "on_demand", "available": true }
+    ]
+  }
+}

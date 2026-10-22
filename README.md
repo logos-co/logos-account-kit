@@ -10,7 +10,7 @@ and the kit lists it once, with every signer that holds it.
 | `AccountPicker` | The account selector: one row per account, never one per signer. |
 | `AccountIdentity` | One account in three lines: the account, the wallet it comes from, its signers. |
 | `SignerChips` | The signers holding an account, in the signer manager's order. |
-| `LockedBanner` | The wallets still locked in the Signer app, from the signer manager's `wallets()`, with an Unlock that hands the app their seeds for `logos.unlock`. |
+| `LockedBanner` | The wallets still locked in the Signer app, from the signer manager's `wallets()`, with an Unlock that hands the app their seeds for `wallets.unlock`. |
 
 Every component takes the signer manager's `roster()` entries as they are: `{ key, family,
 chain, address, path, label, labels, wallet: { fingerprint, name }, holders: [...] }`.

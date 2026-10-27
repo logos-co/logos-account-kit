@@ -42,6 +42,9 @@ Item {
     ColumnLayout {
         width: probe.width
         Kit.PhraseGrid { id: phrase; objectName: "words"; Layout.fillWidth: true }
+        // A wallet whose phrases are 24 words, as Zcash's are.
+        Kit.PhraseGrid { id: fixed; objectName: "fixed"; Layout.fillWidth: true; counts: [24] }
+        Kit.PhraseGrid { id: shown; objectName: "shown"; Layout.fillWidth: true; readOnly: true }
     }
 
     Timer {
@@ -77,6 +80,17 @@ Item {
             phrase.count = 12
             probe.type(5, "word1 word2 word3")
             check("a paste from field 6 fills 6 to 8", phrase.words.slice(4, 9), ["", "word1", "word2", "word3", ""])
+
+            console.log("")
+            console.log("one length only, and read-only")
+            check("a grid offering 24 words alone starts at 24", fixed.count, 24)
+            check("...with no chooser", probe.find(fixed, "fixedCount").visible, false)
+            fixed.text = probe.twelve
+            check("...and 12 words do not shrink it", [fixed.count, fixed.complete], [24, false])
+            shown.text = Array(24).fill("zoo").join(" ")
+            check("a read-only grid shows the words", [shown.count, probe.find(shown, "shown_23").text], [24, "zoo"])
+            check("...in fields that cannot change", probe.find(shown, "shown_0").readOnly, true)
+            check("...and no chooser", probe.find(shown, "shownCount").visible, false)
             console.log("")
             console.log(probe.failures ? "RESULT: FAILURES" : "RESULT: ALL PASS")
             Qt.exit(probe.failures ? 1 : 0)

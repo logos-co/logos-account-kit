@@ -10,7 +10,7 @@ and the kit lists it once, with every signer that holds it.
 | `AccountPicker` | The account selector: one row per account, never one per signer. |
 | `AccountIdentity` | One account in three lines: the account, the wallet it comes from, its signers. |
 | `SignerChips` | The signers holding an account, in the signer manager's order. |
-| `PhraseGrid` | A recovery phrase typed one word to a numbered field, shown as typed so it can be checked against the paper. A phrase pasted into a field spreads over the rest; `text` reads the words back, and setting it fills the grid. |
+| `PhraseGrid` | A recovery phrase typed one word to a numbered field, shown as typed so it can be checked against the paper. A phrase pasted into a field spreads over the rest; `text` reads the words back, and setting it fills the grid. `counts` narrows the lengths offered (Zcash: `[24]`, which also hides the chooser); `readOnly` shows a phrase to be written down, numbered as it will be typed back. |
 
 Every component takes the signer manager's `roster()` entries as they are: `{ key, family,
 chain, address, path, label, labels, wallet: { fingerprint, name }, holders: [...] }`.

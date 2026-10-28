@@ -10,6 +10,7 @@ and the kit lists it once, with every signer that holds it.
 | `AccountPicker` | The account selector: one row per account, never one per signer. |
 | `AccountIdentity` | One account in three lines: the account, the wallet it comes from, its signers. |
 | `SignerChips` | The signers holding an account, in the signer manager's order. |
+| `LockedBanner` | The wallets still locked in the Signer app, from the signer manager's `wallets()`, with an Unlock that hands the app their seeds for `wallets.unlock`. |
 
 Every component takes the signer manager's `roster()` entries as they are: `{ key, family,
 chain, address, path, label, labels, wallet: { fingerprint, name }, holders: [...] }`.
@@ -34,7 +35,9 @@ Wallet “Main phrase” · 73c5da0a
 `roster.js` holds those rules, and also:
 - `select`: the entries an app lists, by family and Bitcoin chain;
 - `find` and `indexOf`: an entry again, by roster key or by any holder's own id;
-- `homeId`: the id a Bitcoin account opens under.
+- `homeId`: the id a Bitcoin account opens under;
+- `lockedWallets` and `lockedTitle`: the wallets still locked, and how the banner names them.
+  A locked wallet's accounts aren't in `roster()` at all until the person unlocks it.
 
 ## Using it in an app
 

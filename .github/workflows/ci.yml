@@ -45,7 +45,8 @@ jobs:
           QT_LOGGING_TO_CONSOLE: "1"
         run: |
           set -euo pipefail
-          nix shell nixpkgs#qt6.qtdeclarative -c bash -c '
+          # Qt from logos-nix, as the apps that vendor the kit build with; never the runner's nixpkgs.
+          nix shell github:logos-co/logos-nix#qt6.qtdeclarative -c bash -c '
             d=$(dirname $(dirname $(readlink -f $(command -v qml))))
             QML_BIN="$d/bin/qml" QT_QML_DIR="$d/lib/qt-6/qml" ./doctests/run_view_probe.sh' 2>&1 | tee /tmp/probes.log
           if grep -q "SKIP" /tmp/probes.log; then echo "::error::the probes skipped"; exit 1; fi

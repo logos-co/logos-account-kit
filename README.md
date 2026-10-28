@@ -10,6 +10,7 @@ and the kit lists it once, with every signer that holds it.
 | `AccountPicker` | The account selector: one row per account, never one per signer. |
 | `AccountIdentity` | One account in three lines: the account, the wallet it comes from, its signers. |
 | `SignerChips` | The signers holding an account, in the signer manager's order. |
+| `LockedBanner` | The wallets still locked in the Signer app, from the signer manager's `wallets()`, with an Unlock that hands the app their seeds for `wallets.unlock`. |
 | `PhraseGrid` | A recovery phrase typed one word to a numbered field, shown as typed so it can be checked against the paper. A phrase pasted into a field spreads over the rest; `text` reads the words back, and setting it fills the grid. `counts` narrows the lengths offered (Zcash: `[24]`, which also hides the chooser); `readOnly` shows a phrase to be written down, numbered as it will be typed back. |
 
 Every component takes the signer manager's `roster()` entries as they are: `{ key, family,
@@ -35,7 +36,9 @@ Wallet “Main phrase” · 73c5da0a
 `roster.js` holds those rules, and also:
 - `select`: the entries an app lists, by family and Bitcoin chain;
 - `find` and `indexOf`: an entry again, by roster key or by any holder's own id;
-- `homeId`: the id a Bitcoin account opens under.
+- `homeId`: the id a Bitcoin account opens under;
+- `lockedWallets` and `lockedTitle`: the wallets still locked, and how the banner names them.
+  A locked wallet's accounts aren't in `roster()` at all until the person unlocks it.
 
 ## Using it in an app
 

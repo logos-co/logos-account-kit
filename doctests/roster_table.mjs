@@ -77,5 +77,14 @@ console.log("\nthe id a Bitcoin account opens under");
 check("a holder's that already has a wallet", R.homeId(E.segwit, ["keycard-73c5da0a-84-1-0"]), "keycard-73c5da0a-84-1-0");
 check("else the first holder's", R.homeId(E.segwit, []), "g_segwit");
 
+console.log("\nthe wallets still locked in the Signer app");
+const ws = [{ seed: "s_1", name: "Main phrase", locked: true }, { seed: "s_2", name: "Card", locked: false }, { seed: "s_3", name: "", locked: true }];
+check("locked ones, in the manager's order", R.lockedWallets(ws).map((w) => w.seed), ["s_1", "s_3"]);
+check("none from an older manager", R.lockedWallets(undefined), []);
+check("one: by name", R.lockedTitle([ws[0]]), "Wallet “Main phrase” is locked");
+check("one unnamed", R.lockedTitle([ws[2]]), "Wallet “Unnamed” is locked");
+check("several: how many", R.lockedTitle(R.lockedWallets(ws)), "2 wallets are locked");
+check("none: nothing to say", R.lockedTitle([]), "");
+
 console.log(failed ? `\nRESULT: ${failed} FAILED` : "\nRESULT: ALL PASS");
 process.exit(failed ? 1 : 0);

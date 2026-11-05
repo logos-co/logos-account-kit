@@ -114,6 +114,8 @@ Item {
             check("a row action for EVM only", [find(card, "wAccount_0_Action_export") !== null, find(card, "wAccount_1_Action_export")],
                   [true, null])
             check("...disabled", prop("wAccount_0_Action_export", "enabled"), false)
+            var b = find(card, "wAccount_0_Action_rename")
+            check("row buttons compact where the design system has it", "compact" in b ? b.compact : "no such property", "compact" in b ? true : "no such property")
             click("wAccount_1_Action_rename")
             click("wAccount_0_Action_remove")
             click("wAction_add")

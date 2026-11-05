@@ -25,6 +25,7 @@
   "segwit": {
     "key": "btc_00112233445566778899aabbccddeeff", "family": "bitcoin", "chain": "test",
     "address": null, "path": "m/84'/1'/0'", "label": "Savings",
+    "firstAddress": "tb1q6rz28mcfaxtmd6v789l9rrlrusdprr9pqcpvkl",
     "wallet": { "fingerprint": "73c5da0a", "name": "Main phrase" },
     "holders": [
       { "signer": "keystore_module", "accountId": "g_segwit", "kind": "keystore",

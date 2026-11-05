@@ -108,6 +108,8 @@ Item {
             check("third: unnamed Taproot", [prop("wAccount_2_Name", "text"), prop("wAccount_2_Id", "text")], ["Bitcoin", "account 1"])
             check("...no address yet, and nothing to copy", [prop("wAccount_2_Address", "text"), shown("wAccount_2_Copy")],
                   ["Unavailable", false])
+            check("a short name on a wide row is whole, not \"Bitco…\"",
+                  [0, 1, 2].map(function (i) { return prop("wAccount_" + i + "_Name", "truncated") }), [false, false, false])
 
             console.log("")
             console.log("actions: each app's own, handed back with what they are for")

@@ -61,7 +61,7 @@ Item {
             fingerprint: "73c5da0a"
             stateText: "Unlocked"
             lines: ["Held by Keystore · Unlocks with its keystore password."]
-            strips: [{ text: "Recovery phrase kept here, encrypted", actions: [{ id: "phrase", label: "Show or forget…" }] },
+            strips: [{ id: "kept", text: "Recovery phrase kept here, encrypted", actions: [{ id: "phrase", label: "Show or forget…" }] },
                      { text: "You trusted this card although Keycard did not certify it.", warn: true, actions: ["Stop trusting"] }]
             actions: [{ id: "add", label: "Add accounts…" }]
             accounts: [probe.e.taproot, probe.e.segwit, probe.e.savings]
@@ -88,7 +88,7 @@ Item {
             check("Wallet ID: the master fingerprint", prop("wWalletId", "text"), "73c5da0a")
             check("state", prop("wState", "text"), "Unlocked")
             check("a line", prop("wLine_0", "text"), "Held by Keystore · Unlocks with its keystore password.")
-            check("strips, a warning among them", [prop("wStrip_0_Text", "text"), prop("wStrip_1_Text", "text")],
+            check("strips, by id or else by place, a warning among them", [prop("wStrip_kept_Text", "text"), prop("wStrip_1_Text", "text")],
                   ["Recovery phrase kept here, encrypted", "You trusted this card although Keycard did not certify it."])
 
             console.log("")
@@ -117,7 +117,7 @@ Item {
             click("wAccount_1_Action_rename")
             click("wAccount_0_Action_remove")
             click("wAction_add")
-            click("wStrip_0_Action_phrase")
+            click("wStrip_kept_Action_phrase")
             click("wStrip_1_Action_Stoptrusting")
             click("wAction_lock")
             click("wAction_password")

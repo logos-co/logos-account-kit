@@ -65,6 +65,7 @@ First receiving address (testnet/signet, 0/0) tb1q6r…pvkl ⧉
   `addressNote`, else "Unavailable".
 - A locked wallet shows neither its Wallet ID nor its accounts.
 - Items declared inside the card, as an inline editor, go above the bottom actions.
+- A strip's object names use its `id` when it has one, else its place.
 - Actions are labels, or `{ id, label, enabled, tip }`; `accountActions` may be a function of
   the entry. The card hands them back as `action(id)`, `stripAction(index, id)` and
   `accountAction(id, entry)`.

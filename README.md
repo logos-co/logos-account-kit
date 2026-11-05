@@ -10,6 +10,8 @@ and the kit lists it once, with every signer that holds it.
 | `AccountPicker` | The account selector: one row per account, never one per signer. |
 | `AccountIdentity` | One account in three lines: the account, the wallet it comes from, its signers. |
 | `SignerChips` | The signers holding an account, in the signer manager's order. |
+| `WalletCard` | One wallet as the Signer, Keycard and Keys apps show it: its name and Wallet ID (the master fingerprint), the app's lines and strips, one `AccountDetails` row per account, and the app's own actions. |
+| `AccountDetails` | One account on a card: name and number, script type, derivation path, and its address (a Bitcoin account's first receiving one), with the app's actions for that account. |
 | `LockedBanner` | The wallets still locked in the Signer app, from the signer manager's `wallets()`, with an Unlock that hands the app their seeds for `wallets.unlock`. |
 | `PhraseGrid` | A recovery phrase typed one word to a numbered field, shown as typed so it can be checked against the paper. A phrase pasted into a field spreads over the rest; `text` reads the words back, and setting it fills the grid. `counts` narrows the lengths offered (Zcash: `[24]`, which also hides the chooser); `readOnly` shows a phrase to be written down, numbered as it will be typed back. |
 
@@ -39,6 +41,34 @@ Wallet “Main phrase” · 73c5da0a
 - `homeId`: the id a Bitcoin account opens under;
 - `lockedWallets` and `lockedTitle`: the wallets still locked, and how the banner names them.
   A locked wallet's accounts aren't in `roster()` at all until the person unlocks it.
+
+## How a wallet card reads
+
+```
+Main phrase                                              Unlocked   [Add accounts…]
+Wallet ID 73c5da0a  master fingerprint
+Held by Keystore · Unlocks with its keystore password.            the app's lines
+┌ Recovery phrase kept here, encrypted               [Show or forget…] ┐  a strip
+Savings  account 0                                  [Rename…] [Remove…]
+Derivation path m/44'/60'/0'/0/0
+Address 0x9858…da94 ⧉
+Savings  account 0  [Native SegWit] [Test networks] [Rename…] [Remove…]
+Derivation path m/84'/1'/0'
+First receiving address (testnet/signet, 0/0) tb1q6r…pvkl ⧉
+[Lock]                                        [Rename…] [Change password…]
+```
+
+- Rows go Ethereum, Bitcoin, then Bitcoin's test networks; SegWit before Taproot; then by number.
+- An unnamed account is "Ethereum" or "Bitcoin", with its number beside it.
+- A Bitcoin row needs `firstAddress` on its entry. The signer manager's roster gives it to the
+  Signer app; the Keycard and Keys apps derive it. Without one the row says the entry's
+  `addressNote`, else "Unavailable".
+- A locked wallet shows neither its Wallet ID nor its accounts.
+- Items declared inside the card, as an inline editor, go above the bottom actions.
+- A strip's object names use its `id` when it has one, else its place.
+- Actions are labels, or `{ id, label, enabled, tip }`; `accountActions` may be a function of
+  the entry. The card hands them back as `action(id)`, `stripAction(index, id)` and
+  `accountAction(id, entry)`.
 
 ## Using it in an app
 

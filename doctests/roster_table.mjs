@@ -86,5 +86,34 @@ check("one unnamed", R.lockedTitle([ws[2]]), "Wallet “Unnamed” is locked");
 check("several: how many", R.lockedTitle(R.lockedWallets(ws)), "2 wallets are locked");
 check("none: nothing to say", R.lockedTitle([]), "");
 
+console.log("\na wallet card's rows: name and number, script type, path and address");
+check("a named account", R.rowTitle(E.segwit), "Savings");
+check("an unnamed one says what it is", [R.rowTitle(E.taproot), R.rowTitle(E.imported)], ["Bitcoin", "Ethereum"]);
+check("its number", [R.rowId(E.taproot), R.rowId(E.savings)], ["account 1", "account 0"]);
+check("no path, no number", R.rowId(E.imported), "");
+check("badges: script type, then test networks", R.badges(E.taproot), ["Taproot", "Test networks"]);
+check("none on mainnet but the script type", R.badges({ family: "bitcoin", chain: "main" }), ["Native SegWit"]);
+check("none on Ethereum", R.badges(E.savings), []);
+check("address labels", [R.addressLabel(E.savings), R.addressLabel({ family: "bitcoin", chain: "main" }), R.addressLabel(E.segwit)],
+      ["Address", "First receiving address (0/0)", "First receiving address (testnet/signet, 0/0)"]);
+check("a Bitcoin account's first receiving address", R.rowAddressText(E.segwit), "tb1q6r…pvkl");
+check("an EVM account's own", R.rowAddressText(E.savings), "0x9858…da94");
+check("none yet: what the app says, else Unavailable",
+      [R.rowAddressText({ family: "bitcoin", addressNote: "Connect the card" }), R.rowAddressText(E.taproot)],
+      ["Connect the card", "Unavailable"]);
+const mixed = [E.taproot, { key: "m1", family: "bitcoin", chain: "main", path: "m/84'/0'/1'" }, E.segwit,
+               { key: "e1", family: "evm", path: "m/44'/60'/0'/0/1" }, { key: "m0", family: "bitcoin", chain: "main", path: "m/84'/0'/0'" },
+               E.savings, { key: "mt", family: "bitcoin_taproot", chain: "main", path: "m/86'/0'/0'" }];
+check("order: Ethereum, Bitcoin, test networks; SegWit first; by number", R.sortAccounts(mixed).map((e) => e.key),
+      [E.savings.key, "e1", "m0", "m1", "mt", E.segwit.key, E.taproot.key]);
+check("the list itself is left alone", mixed[0].key, E.taproot.key);
+
+console.log("\nan app's actions, as labels or objects");
+check("a label", R.action("Rename…"), { id: "Rename…", label: "Rename…", enabled: true, tip: "" });
+check("an object", R.action({ id: "remove", label: "Remove…", enabled: false }), { id: "remove", label: "Remove…", enabled: false, tip: "" });
+check("from a function of the entry", R.actions((e) => R.isBitcoin(e) ? ["Descriptor…"] : ["Export…"], E.segwit).map((a) => a.label), ["Descriptor…"]);
+check("unlabelled ones dropped", R.actions([{ id: "x" }, "Rename…"]).length, 1);
+check("its object-name suffix", R.actionName({ id: "change-password…" }), "changepassword");
+
 console.log(failed ? `\nRESULT: ${failed} FAILED` : "\nRESULT: ALL PASS");
 process.exit(failed ? 1 : 0);

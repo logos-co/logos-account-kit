@@ -74,6 +74,7 @@ Item {
             onAction: function (id) { probe.heard = probe.heard.concat(["wallet:" + id]) }
             onStripAction: function (i, id) { probe.heard = probe.heard.concat(["strip" + i + ":" + id]) }
             onAccountAction: function (id, entry) { probe.heard = probe.heard.concat([id + ":" + entry.key]) }
+            Text { objectName: "appEditor"; text: "the app's own" }
         }
     }
 
@@ -123,6 +124,8 @@ Item {
             check("heard in order", probe.heard,
                   ["rename:" + probe.e.segwit.key, "remove:" + probe.e.savings.key, "wallet:add", "strip0:phrase",
                    "strip1:Stop trusting", "wallet:lock", "wallet:password"])
+
+            check("the app's own items go in the card", find(card, "appEditor") !== null && find(card, "appEditor").parent.objectName, "wContent")
 
             console.log("")
             console.log("locked, then empty")

@@ -64,6 +64,7 @@ First receiving address (testnet/signet, 0/0) tb1q6r…pvkl ⧉
   Signer app; the Keycard and Keys apps derive it. Without one the row says the entry's
   `addressNote`, else "Unavailable".
 - A locked wallet shows neither its Wallet ID nor its accounts.
+- Items declared inside the card, as an inline editor, go above the bottom actions.
 - Actions are labels, or `{ id, label, enabled, tip }`; `accountActions` may be a function of
   the entry. The card hands them back as `action(id)`, `stripAction(index, id)` and
   `accountAction(id, entry)`.

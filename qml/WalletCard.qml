@@ -30,6 +30,8 @@ Frame {
     property var accountActions: []
     property var leftActions: []
     property var rightActions: []
+    // The app's own items, as an inline editor, go above the bottom actions.
+    default property alias content: extraArea.data
 
     signal action(string id)
     signal stripAction(int index, string id)
@@ -229,6 +231,13 @@ Frame {
                     Rectangle { Layout.fillWidth: true; implicitHeight: 1; color: Theme.palette.borderSubtle }
                 }
             }
+        }
+
+        ColumnLayout {
+            id: extraArea
+            objectName: card.namePrefix + "Content"
+            Layout.fillWidth: true
+            spacing: Theme.spacing.small
         }
 
         RowLayout {

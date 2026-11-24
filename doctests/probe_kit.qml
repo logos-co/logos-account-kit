@@ -68,10 +68,10 @@ Item {
         check("...shown", prop(evm, "evmAddress", "visible"), true)
         check("no script type", prop(evm, "evmType", "visible"), false)
         check("wallet", prop(evm, "evmWallet", "text"), "Wallet “Main phrase” · 73c5da0a · account 0")
-        check("first chip: the keystore, ready", prop(evm, "evmChip_0", "text"), "● This device (Keystore)")
-        check("then the Shell, connected", prop(evm, "evmChip_1", "text"), "● Keycard Shell · USB")
-        check("then QR, with no dot", prop(evm, "evmChip_2", "text"), "QR wallet")
-        check("last the card, not connected", prop(evm, "evmChip_3", "text"), "○ Keycard · reader")
+        check("first chip: the keystore, by its short name", prop(evm, "evmChip_0", "text"), "Keystore")
+        check("then the Shell", prop(evm, "evmChip_1", "text"), "Keycard Shell")
+        check("then QR", prop(evm, "evmChip_2", "text"), "QR wallet")
+        check("a card that isn't connected is left out while another signer can sign", find(evm, "evmChip_3"), null)
         check("no copy button unless asked", prop(evm, "evmCopy", "visible"), false)
     }
 
@@ -84,8 +84,8 @@ Item {
         check("number", prop(btc, "btcAccount", "text"), "account 0")
         check("no address", prop(btc, "btcAddress", "visible"), false)
         check("wallet", prop(btc, "btcWallet", "text"), "Wallet “Main phrase” · 73c5da0a")
-        console.log("...unnamed, it is Bitcoin #<account>, and the number isn't said twice")
-        check("name", prop(tap, "tapName", "text"), "Bitcoin #1")
+        console.log("...unnamed, it is Bitcoin <account>, and the number isn't said twice")
+        check("name", prop(tap, "tapName", "text"), "Bitcoin 1")
         check("no separate number", prop(tap, "tapAccount", "visible"), false)
         check("a QR wallet's chip", prop(tap, "tapChip_0", "text"), "QR wallet")
     }

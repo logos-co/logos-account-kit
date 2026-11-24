@@ -24,10 +24,11 @@ console.log("\nan EVM account leads with its name and address");
 check("named", R.title(E.savings), "Savings 0x9858…da94");
 check("unnamed: the address alone", R.title(E.imported), "0xf39F…2266");
 check("no name to show for an unnamed one", R.name(E.imported), "");
+check("unnamed, derived: Ethereum <index>", R.name({ family: "evm", path: "m/44'/60'/0'/0/2" }), "Ethereum 2");
 
 console.log("\na Bitcoin account leads with its name, script type and number");
 check("named", R.title(E.segwit), "Savings · Native SegWit · account 0");
-check("unnamed: Bitcoin #<account>", R.title(E.taproot), "Bitcoin #1 · Taproot");
+check("unnamed: Bitcoin <account>", R.title(E.taproot), "Bitcoin 1 · Taproot");
 check("its number", R.accountNumber(E.taproot), 1);
 check("an EVM address's index", R.accountNumber(E.savings), 0);
 check("no path, no number", R.accountNumber(E.imported), -1);
@@ -46,6 +47,10 @@ check("the keystore", R.holderName(keystore), "This device (Keystore)");
 check("the Shell", R.holderName(shell), "Keycard Shell · USB");
 check("a QR wallet", R.holderName(qr), "QR wallet");
 check("a card in a reader", R.holderName(reader), "Keycard · reader");
+check("short: the keystore", R.shortHolderName(keystore), "Keystore");
+check("short: the Shell", R.shortHolderName(shell), "Keycard Shell");
+check("short: a QR wallet", R.shortHolderName(qr), "QR wallet");
+check("short: a card in a reader", R.shortHolderName(reader), "Keycard");
 check("ready", R.holderState(keystore), "ready");
 check("QR is never 'connected'", R.holderState(qr), "");
 check("not connected", R.holderState(reader), "not connected");
@@ -85,6 +90,11 @@ check("one: by name", R.lockedTitle([ws[0]]), "Wallet “Main phrase” is locke
 check("one unnamed", R.lockedTitle([ws[2]]), "Wallet “Unnamed” is locked");
 check("several: how many", R.lockedTitle(R.lockedWallets(ws)), "2 wallets are locked");
 check("none: nothing to say", R.lockedTitle([]), "");
+check("by the app that unlocks them",
+      R.lockedByDevice([{ seed: "a", kinds: ["keystore"] }, { seed: "b", kinds: ["keycard_shell", "keycard"] }, { seed: "c", kinds: ["keystore"] }])
+          .map((g) => [g.device, g.count, g.seeds]),
+      [["Keystore", 2, ["a", "c"]], ["Keycard", 1, ["b"]]]);
+check("an unknown kind goes to the Signer app", R.deviceHint(R.deviceLabel({ kinds: ["mystery"] })), "Unlock them in the Signer app to use their accounts.");
 
 console.log("\na wallet card's rows: name and number, script type, path and address");
 check("a named account", R.rowTitle(E.segwit), "Savings");
@@ -95,7 +105,7 @@ check("badges: script type, then test networks", R.badges(E.taproot), ["Taproot"
 check("none on mainnet but the script type", R.badges({ family: "bitcoin", chain: "main" }), ["Native SegWit"]);
 check("none on Ethereum", R.badges(E.savings), []);
 check("address labels", [R.addressLabel(E.savings), R.addressLabel({ family: "bitcoin", chain: "main" }), R.addressLabel(E.segwit)],
-      ["Address", "First receiving address (0/0)", "First receiving address (testnet/signet, 0/0)"]);
+      ["Address", "First address", "First address"]);
 check("a Bitcoin account's first receiving address", R.rowAddressText(E.segwit), "tb1q6r…pvkl");
 check("an EVM account's own", R.rowAddressText(E.savings), "0x9858…da94");
 check("none yet: what the app says, else Unavailable",
@@ -109,8 +119,9 @@ check("order: Ethereum, Bitcoin, test networks; SegWit first; by number", R.sort
 check("the list itself is left alone", mixed[0].key, E.taproot.key);
 
 console.log("\nan app's actions, as labels or objects");
-check("a label", R.action("Rename…"), { id: "Rename…", label: "Rename…", enabled: true, tip: "" });
-check("an object", R.action({ id: "remove", label: "Remove…", enabled: false }), { id: "remove", label: "Remove…", enabled: false, tip: "" });
+check("a label", R.action("Rename…"), { id: "Rename…", label: "Rename…", enabled: true, tip: "", icon: "", primary: false });
+check("an object", R.action({ id: "remove", label: "Remove…", enabled: false }), { id: "remove", label: "Remove…", enabled: false, tip: "", icon: "", primary: false });
+check("an icon action", R.action({ id: "rename", label: "Edit name", icon: "edit.svg" }), { id: "rename", label: "Edit name", enabled: true, tip: "", icon: "edit.svg", primary: false });
 check("from a function of the entry", R.actions((e) => R.isBitcoin(e) ? ["Descriptor…"] : ["Export…"], E.segwit).map((a) => a.label), ["Descriptor…"]);
 check("unlabelled ones dropped", R.actions([{ id: "x" }, "Rename…"]).length, 1);
 check("its object-name suffix", R.actionName({ id: "change-password…" }), "changepassword");

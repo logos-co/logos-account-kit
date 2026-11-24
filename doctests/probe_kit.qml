@@ -48,6 +48,11 @@ Item {
         Kit.AccountIdentity { id: evm; objectName: "evm"; namePrefix: "evm"; Layout.fillWidth: true; entry: probe.e.savings }
         Kit.AccountIdentity { id: btc; objectName: "btc"; namePrefix: "btc"; Layout.fillWidth: true; entry: probe.e.segwit }
         Kit.AccountIdentity { id: tap; objectName: "tap"; namePrefix: "tap"; Layout.fillWidth: true; entry: probe.e.taproot }
+        // Held only by a Keycard Shell that isn't plugged in: the row must still name it.
+        Kit.AccountIdentity { id: shellOnly; objectName: "shellOnly"; namePrefix: "shellOnly"; Layout.fillWidth: true
+                              entry: ({ key: "so", family: "evm", chain: "main", address: "0x9858effd232b4033e47d90003d41ec34ecaeda94", path: "m/44'/60'/0'/0/3",
+                                        label: "", wallet: { fingerprint: "73c5da0a", name: "Card" },
+                                        holders: [{ signer: "keycard_shell_module", kind: "keycard_shell", transport: "usb", presence: "absent" }] }) }
         Kit.AccountIdentity { id: key; objectName: "key"; namePrefix: "key"; Layout.fillWidth: true; entry: probe.e.imported }
         Kit.AccountIdentity { id: none; objectName: "none"; namePrefix: "none"; Layout.fillWidth: true; entry: null }
         Kit.AccountPicker {
@@ -88,6 +93,7 @@ Item {
         check("name", prop(tap, "tapName", "text"), "Bitcoin 1")
         check("no separate number", prop(tap, "tapAccount", "visible"), false)
         check("a QR wallet's chip", prop(tap, "tapChip_0", "text"), "QR wallet")
+        check("a Shell-only account that isn't plugged in still names its device", prop(shellOnly, "shellOnlyChip_0", "text"), "Keycard Shell")
     }
 
     function assertAnImportedKeyHasNoWallet() {

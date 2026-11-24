@@ -53,7 +53,7 @@ Main phrase ✎                                                       🗑
 Wallet ID 73c5da0a  master fingerprint
 Held by Keystore · Unlocks with its keystore password.            the app's lines
 ┌ Recovery phrase kept here, encrypted               [Show or forget…] ┐  a strip
-[                          Add accounts                              ]  primary
+[                          Add accounts                              ]  with primaryAdd
 Savings ✎                                                           🗑
 Derivation path m/44'/60'/0'/0/0
 Address 0x9858…da94 ⧉
@@ -68,7 +68,9 @@ First address tb1q6r…pvkl ⧉
   sits beside a name: the derivation path carries it.
 - With `editIcon` and `trashIcon` set, rename and remove (forget, for the wallet) are icons by the
   name and at the right edge; without them they stay text buttons with the app's other actions.
-  The `add` action is the card's full-width primary button.
+- With `primaryAdd`, the `add` action is the card's full-width primary button; without it, it stays a
+  text button with the others. Its object name is `<prefix>Action_add` either way.
+- `editWhileLocked` keeps the edit pencil on a locked wallet (renaming doesn't need the keys).
 - A Bitcoin row needs `firstAddress` on its entry. The signer manager's roster gives it to the
   Signer app; the Keycard and Keys apps derive it. Without one the row says the entry's
   `addressNote`, else "Unavailable".

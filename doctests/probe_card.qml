@@ -120,7 +120,8 @@ Item {
             check("row buttons compact where the design system has it", "compact" in b ? b.compact : "no such property", "compact" in b ? true : "no such property")
             click("wAccount_1_Action_rename")
             click("wAccount_0_Action_remove")
-            click("wAddAccounts")
+            check("add, not opted in: a text button among the others", [card.addAction, find(card, "wAction_add") !== null], [null, true])
+            click("wAction_add")
             click("wStrip_kept_Action_phrase")
             click("wStrip_1_Action_Stoptrusting")
             click("wAction_lock")
@@ -133,7 +134,19 @@ Item {
 
             console.log("")
             console.log("locked, then empty")
+            console.log("")
+            console.log("opt-ins: add as the primary button, the pencil on a locked wallet")
+            card.primaryAdd = true
+            check("primaryAdd: the add action is the full-width button, under the same name",
+                  [card.addAction !== null, shown("wAction_add"), prop("wAction_add", "text")], [true, true, "Add accounts…"])
+            card.primaryAdd = false
+            card.editIcon = Qt.resolvedUrl("edit.svg")
+            card.actions = [{ id: "add", label: "Add accounts…" }, { id: "rename", label: "Rename…" }]
             card.locked = true
+            check("locked: no pencil by default", shown("wEdit"), false)
+            card.editWhileLocked = true
+            check("...but with editWhileLocked, as the Signer wants", shown("wEdit"), true)
+            card.editWhileLocked = false
             check("locked: its text", [shown("wLocked"), prop("wLocked", "text")],
                   [true, "Locked · its ID and accounts show once you unlock it in the Signer app."])
             check("...no Wallet ID", shown("wWalletId"), false)

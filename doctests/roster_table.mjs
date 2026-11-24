@@ -98,7 +98,7 @@ check("an unknown kind goes to the Signer app", R.deviceHint(R.deviceLabel({ kin
 
 console.log("\na wallet card's rows: name and number, script type, path and address");
 check("a named account", R.rowTitle(E.segwit), "Savings");
-check("an unnamed one says what it is", [R.rowTitle(E.taproot), R.rowTitle(E.imported)], ["Bitcoin", "Ethereum"]);
+check("an unnamed one: what it is and its number, as the picker names it; an imported key just what it is", [R.rowTitle(E.taproot), R.rowTitle(E.imported)], ["Bitcoin 1", "Ethereum"]);
 check("its number", [R.rowId(E.taproot), R.rowId(E.savings)], ["account 1", "account 0"]);
 check("no path, no number", R.rowId(E.imported), "");
 check("badges: script type, then test networks", R.badges(E.taproot), ["Taproot", "Test networks"]);

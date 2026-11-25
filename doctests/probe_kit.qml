@@ -48,6 +48,11 @@ Item {
         Kit.AccountIdentity { id: evm; objectName: "evm"; namePrefix: "evm"; Layout.fillWidth: true; entry: probe.e.savings }
         Kit.AccountIdentity { id: btc; objectName: "btc"; namePrefix: "btc"; Layout.fillWidth: true; entry: probe.e.segwit }
         Kit.AccountIdentity { id: tap; objectName: "tap"; namePrefix: "tap"; Layout.fillWidth: true; entry: probe.e.taproot }
+        // Held only by a Keycard Shell that isn't plugged in: the row must still name it.
+        Kit.AccountIdentity { id: shellOnly; objectName: "shellOnly"; namePrefix: "shellOnly"; Layout.fillWidth: true
+                              entry: ({ key: "so", family: "evm", chain: "main", address: "0x9858effd232b4033e47d90003d41ec34ecaeda94", path: "m/44'/60'/0'/0/3",
+                                        label: "", wallet: { fingerprint: "73c5da0a", name: "Card" },
+                                        holders: [{ signer: "keycard_shell_module", kind: "keycard_shell", transport: "usb", presence: "absent" }] }) }
         Kit.AccountIdentity { id: key; objectName: "key"; namePrefix: "key"; Layout.fillWidth: true; entry: probe.e.imported }
         Kit.AccountIdentity { id: none; objectName: "none"; namePrefix: "none"; Layout.fillWidth: true; entry: null }
         Kit.AccountPicker {
@@ -68,10 +73,10 @@ Item {
         check("...shown", prop(evm, "evmAddress", "visible"), true)
         check("no script type", prop(evm, "evmType", "visible"), false)
         check("wallet", prop(evm, "evmWallet", "text"), "Wallet “Main phrase” · 73c5da0a · account 0")
-        check("first chip: the keystore, ready", prop(evm, "evmChip_0", "text"), "● This device (Keystore)")
-        check("then the Shell, connected", prop(evm, "evmChip_1", "text"), "● Keycard Shell · USB")
-        check("then QR, with no dot", prop(evm, "evmChip_2", "text"), "QR wallet")
-        check("last the card, not connected", prop(evm, "evmChip_3", "text"), "○ Keycard · reader")
+        check("first chip: the keystore, by its short name", prop(evm, "evmChip_0", "text"), "Keystore")
+        check("then the Shell", prop(evm, "evmChip_1", "text"), "Keycard Shell")
+        check("then QR", prop(evm, "evmChip_2", "text"), "QR wallet")
+        check("a card that isn't connected is left out while another signer can sign", find(evm, "evmChip_3"), null)
         check("no copy button unless asked", prop(evm, "evmCopy", "visible"), false)
     }
 
@@ -84,10 +89,11 @@ Item {
         check("number", prop(btc, "btcAccount", "text"), "account 0")
         check("no address", prop(btc, "btcAddress", "visible"), false)
         check("wallet", prop(btc, "btcWallet", "text"), "Wallet “Main phrase” · 73c5da0a")
-        console.log("...unnamed, it is Bitcoin #<account>, and the number isn't said twice")
-        check("name", prop(tap, "tapName", "text"), "Bitcoin #1")
+        console.log("...unnamed, it is Bitcoin <account>, and the number isn't said twice")
+        check("name", prop(tap, "tapName", "text"), "Bitcoin 1")
         check("no separate number", prop(tap, "tapAccount", "visible"), false)
         check("a QR wallet's chip", prop(tap, "tapChip_0", "text"), "QR wallet")
+        check("a Shell-only account that isn't plugged in still names its device", prop(shellOnly, "shellOnlyChip_0", "text"), "Keycard Shell")
     }
 
     function assertAnImportedKeyHasNoWallet() {

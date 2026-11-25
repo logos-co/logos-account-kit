@@ -94,7 +94,7 @@ Item {
             console.log("")
             console.log("rows: Ethereum, then Bitcoin's test networks, each with its path and address")
             check("first row: the EVM account", prop("wAccount_0_Name", "text"), "Savings")
-            check("...its index", prop("wAccount_0_Id", "text"), "account 0")
+            check("...no number beside it: the path carries it, as in the Keycard app", shown("wAccount_0_Id"), false)
             check("...its path", prop("wAccount_0_Path", "text"), "m/44'/60'/0'/0/0")
             check("...its address", [prop("wAccount_0_AddressLabel", "text"), prop("wAccount_0_Address", "text")],
                   ["Address", "0x9858…da94"])
@@ -103,9 +103,9 @@ Item {
             check("...its badges", [prop("wAccount_1_Badge_0", "text"), prop("wAccount_1_Badge_1", "text")],
                   ["Native SegWit", "Test networks"])
             check("...its first receiving address", [prop("wAccount_1_AddressLabel", "text"), prop("wAccount_1_Address", "text")],
-                  ["First receiving address (testnet/signet, 0/0)", "tb1q6r…pvkl"])
+                  ["First address", "tb1q6r…pvkl"])
             check("...copied whole", prop("wAccount_1_Copy", "value"), "tb1q6rz28mcfaxtmd6v789l9rrlrusdprr9pqcpvkl")
-            check("third: unnamed Taproot", [prop("wAccount_2_Name", "text"), prop("wAccount_2_Id", "text")], ["Bitcoin", "account 1"])
+            check("third: unnamed Taproot, named as the picker names it", prop("wAccount_2_Name", "text"), "Bitcoin 1")
             check("...no address yet, and nothing to copy", [prop("wAccount_2_Address", "text"), shown("wAccount_2_Copy")],
                   ["Unavailable", false])
             check("a short name on a wide row is whole, not \"Bitco…\"",
@@ -120,6 +120,7 @@ Item {
             check("row buttons compact where the design system has it", "compact" in b ? b.compact : "no such property", "compact" in b ? true : "no such property")
             click("wAccount_1_Action_rename")
             click("wAccount_0_Action_remove")
+            check("add, not opted in: a text button among the others", [card.addAction, find(card, "wAction_add") !== null], [null, true])
             click("wAction_add")
             click("wStrip_kept_Action_phrase")
             click("wStrip_1_Action_Stoptrusting")
@@ -133,7 +134,19 @@ Item {
 
             console.log("")
             console.log("locked, then empty")
+            console.log("")
+            console.log("opt-ins: add as the primary button, the pencil on a locked wallet")
+            card.primaryAdd = true
+            check("primaryAdd: the add action is the full-width button, under the same name",
+                  [card.addAction !== null, shown("wAction_add"), prop("wAction_add", "text")], [true, true, "Add accounts…"])
+            card.primaryAdd = false
+            card.editIcon = Qt.resolvedUrl("edit.svg")
+            card.actions = [{ id: "add", label: "Add accounts…" }, { id: "rename", label: "Rename…" }]
             card.locked = true
+            check("locked: no pencil by default", shown("wEdit"), false)
+            card.editWhileLocked = true
+            check("...but with editWhileLocked, as the Signer wants", shown("wEdit"), true)
+            card.editWhileLocked = false
             check("locked: its text", [shown("wLocked"), prop("wLocked", "text")],
                   [true, "Locked · its ID and accounts show once you unlock it in the Signer app."])
             check("...no Wallet ID", shown("wWalletId"), false)
